@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Scrollable Grass Field</title>
+<title>Rat Realm Grass Ruler</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -25,7 +25,7 @@ body {
 .field {
   position: relative;
   width: 100vw;
-  height: 140px;
+  height: 160px;
   overflow: hidden;
   touch-action: none;
   user-select: none;
@@ -36,7 +36,7 @@ body {
   left: 0;
   top: 0;
   width: 4000px;
-  height: 140px;
+  height: 160px;
   transform: translateX(0px);
   will-change: transform;
 }
@@ -46,7 +46,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 20px;
+  bottom: 34px;
   height: 2px;
   background: rgba(65, 120, 65, 0.45);
   z-index: 1;
@@ -56,8 +56,8 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 20px;
-  height: 90px;
+  bottom: 34px;
+  height: 92px;
   z-index: 2;
 }
 
@@ -69,6 +69,50 @@ body {
   transform-origin: bottom center;
   clip-path: polygon(50% 0%,70% 20%,100% 100%,0% 100%,30% 20%);
 }
+
+/* ruler under grass */
+.ruler {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  z-index: 10;
+  pointer-events: none;
+  border-top: 1px solid rgba(0,0,0,.18);
+  background: rgba(255,255,255,.55);
+}
+
+.tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0,0,0,.45);
+}
+
+.tick.small {
+  height: 7px;
+}
+
+.tick.medium {
+  height: 12px;
+  background: rgba(0,0,0,.55);
+}
+
+.tick.big {
+  height: 19px;
+  background: rgba(0,0,0,.7);
+}
+
+.tick-label {
+  position: absolute;
+  bottom: 18px;
+  transform: translateX(-50%);
+  font-family: monospace;
+  font-size: 10px;
+  color: rgba(0,0,0,.65);
+  white-space: nowrap;
+}
 </style>
 </head>
 
@@ -77,6 +121,7 @@ body {
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
     <div class="grass-strip" id="grass"></div>
+    <div class="ruler" id="ruler"></div>
   </div>
 </div>
 
@@ -84,6 +129,7 @@ body {
 const field = document.getElementById("field");
 const grassWorld = document.getElementById("grassWorld");
 const grass = document.getElementById("grass");
+const ruler = document.getElementById("ruler");
 
 const worldWidth = 4000;
 const bladeCount = 900;
@@ -110,6 +156,7 @@ function applyMove() {
   grassWorld.style.transform = `translateX(${worldX}px)`;
 }
 
+/* make grass */
 for (let i = 0; i < bladeCount; i++) {
   const blade = document.createElement("div");
   blade.className = "blade";
@@ -125,6 +172,30 @@ for (let i = 0; i < bladeCount; i++) {
   blade.style.background = `hsl(${hue}, 52%, ${light}%)`;
 
   grass.appendChild(blade);
+}
+
+/* make ruler */
+for (let x = 0; x <= worldWidth; x += 50) {
+  const tick = document.createElement("div");
+
+  if (x % 500 === 0) {
+    tick.className = "tick big";
+  } else if (x % 100 === 0) {
+    tick.className = "tick medium";
+  } else {
+    tick.className = "tick small";
+  }
+
+  tick.style.left = `${x}px`;
+  ruler.appendChild(tick);
+
+  if (x % 500 === 0) {
+    const label = document.createElement("div");
+    label.className = "tick-label";
+    label.style.left = `${x}px`;
+    label.textContent = x;
+    ruler.appendChild(label);
+  }
 }
 
 /* iPhone touch drag */
@@ -153,7 +224,7 @@ field.addEventListener("touchcancel", () => {
   dragging = false;
 });
 
-/* desktop mouse drag too */
+/* desktop mouse drag */
 field.addEventListener("mousedown", (e) => {
   dragging = true;
   startX = e.clientX;
@@ -162,6 +233,7 @@ field.addEventListener("mousedown", (e) => {
 
 window.addEventListener("mousemove", (e) => {
   if (!dragging) return;
+
   const dx = e.clientX - startX;
   worldX = startWorldX + dx;
   applyMove();
