@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rat Realm Grass Ruler</title>
+<title>Rat Realm Grass Ruler 2P</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -29,6 +29,7 @@ body {
   overflow: hidden;
   touch-action: none;
   user-select: none;
+  perspective: 900px;
 }
 
 .grass-world {
@@ -37,8 +38,18 @@ body {
   top: 0;
   width: 4000px;
   height: 160px;
-  transform: translateX(0px);
-  will-change: transform;
+  transform: translateX(0px) rotateY(0deg);
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+}
+
+/* only animate when flipping, not while dragging */
+.grass-world.flip-anim {
+  transition: transform 650ms ease, filter 650ms ease;
+}
+
+.grass-world.flipping {
+  filter: blur(7px);
 }
 
 .grass-world::after {
@@ -70,7 +81,6 @@ body {
   clip-path: polygon(50% 0%,70% 20%,100% 100%,0% 100%,30% 20%);
 }
 
-/* ruler under grass */
 .ruler {
   position: absolute;
   left: 0;
@@ -90,9 +100,7 @@ body {
   background: rgba(0,0,0,.45);
 }
 
-.tick.small {
-  height: 7px;
-}
+.tick.small { height: 7px; }
 
 .tick.medium {
   height: 12px;
@@ -112,6 +120,13 @@ body {
   font-size: 10px;
   color: rgba(0,0,0,.65);
   white-space: nowrap;
+}
+
+/* backside marker: readable but italic */
+body.backside .tick-label {
+  transform: translateX(-50%) rotateY(180deg);
+  font-style: italic;
+  color: rgba(0,0,0,.8);
 }
 </style>
 </head>
@@ -138,6 +153,14 @@ let worldX = 0;
 let startX = 0;
 let startWorldX = 0;
 let dragging = false;
+let moved = false;
+let backside = false;
+
+let rafPending = false;
+
+let lastTapTime = 0;
+let lastTapX = 0;
+let lastTapY = 0;
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
@@ -151,9 +174,48 @@ function maxLeft() {
   return field.clientWidth - worldWidth;
 }
 
-function applyMove() {
+function currentCenterWorldX() {
+  return -worldX + field.clientWidth / 2;
+}
+
+function render() {
+  rafPending = false;
+
   worldX = clamp(worldX, maxLeft(), 0);
-  grassWorld.style.transform = `translateX(${worldX}px)`;
+
+  const pivotX = currentCenterWorldX();
+  const rot = backside ? 180 : 0;
+
+  grassWorld.style.transformOrigin = `${pivotX}px 80px`;
+  grassWorld.style.transform = `translateX(${worldX}px) rotateY(${rot}deg)`;
+}
+
+function requestRender() {
+  if (rafPending) return;
+  rafPending = true;
+  requestAnimationFrame(render);
+}
+
+function applyMove() {
+  requestRender();
+}
+
+function flip2P() {
+  backside = !backside;
+
+  grassWorld.classList.add("flip-anim");
+  grassWorld.classList.add("flipping");
+  document.body.classList.toggle("backside", backside);
+
+  render();
+
+  setTimeout(() => {
+    grassWorld.classList.remove("flipping");
+  }, 380);
+
+  setTimeout(() => {
+    grassWorld.classList.remove("flip-anim");
+  }, 700);
 }
 
 /* make grass */
@@ -178,13 +240,9 @@ for (let i = 0; i < bladeCount; i++) {
 for (let x = 0; x <= worldWidth; x += 50) {
   const tick = document.createElement("div");
 
-  if (x % 500 === 0) {
-    tick.className = "tick big";
-  } else if (x % 100 === 0) {
-    tick.className = "tick medium";
-  } else {
-    tick.className = "tick small";
-  }
+  if (x % 500 === 0) tick.className = "tick big";
+  else if (x % 100 === 0) tick.className = "tick medium";
+  else tick.className = "tick small";
 
   tick.style.left = `${x}px`;
   ruler.appendChild(tick);
@@ -198,9 +256,10 @@ for (let x = 0; x <= worldWidth; x += 50) {
   }
 }
 
-/* iPhone touch drag */
+/* iPhone touch drag + double tap */
 field.addEventListener("touchstart", (e) => {
   dragging = true;
+  moved = false;
   startX = e.touches[0].clientX;
   startWorldX = worldX;
 }, { passive: false });
@@ -212,29 +271,57 @@ field.addEventListener("touchmove", (e) => {
   const x = e.touches[0].clientX;
   const dx = x - startX;
 
+  if (Math.abs(dx) > 5) moved = true;
+
   worldX = startWorldX + dx;
   applyMove();
 }, { passive: false });
 
-field.addEventListener("touchend", () => {
+field.addEventListener("touchend", (e) => {
   dragging = false;
+
+  if (moved) return;
+
+  const now = Date.now();
+  const touch = e.changedTouches[0];
+  const x = touch.clientX;
+  const y = touch.clientY;
+
+  const closeTap =
+    Math.abs(x - lastTapX) < 30 &&
+    Math.abs(y - lastTapY) < 30;
+
+  if (now - lastTapTime < 300 && closeTap) {
+    flip2P();
+    lastTapTime = 0;
+    return;
+  }
+
+  lastTapTime = now;
+  lastTapX = x;
+  lastTapY = y;
 });
 
 field.addEventListener("touchcancel", () => {
   dragging = false;
 });
 
-/* desktop mouse drag */
+/* desktop mouse drag + double click */
 field.addEventListener("mousedown", (e) => {
   dragging = true;
+  moved = false;
   startX = e.clientX;
   startWorldX = worldX;
 });
+
+field.addEventListener("dblclick", flip2P);
 
 window.addEventListener("mousemove", (e) => {
   if (!dragging) return;
 
   const dx = e.clientX - startX;
+  if (Math.abs(dx) > 5) moved = true;
+
   worldX = startWorldX + dx;
   applyMove();
 });
@@ -243,9 +330,9 @@ window.addEventListener("mouseup", () => {
   dragging = false;
 });
 
-window.addEventListener("resize", applyMove);
+window.addEventListener("resize", render);
 
-applyMove();
+render();
 </script>
 
 </body>
