@@ -44,7 +44,7 @@ body {
 }
 
 .grass-world.flip-anim {
-  transition: transform 1500ms ease, filter 1500ms ease;
+  transition: transform 650ms ease, filter 650ms ease;
 }
 
 .grass-world.flipping {
@@ -71,7 +71,6 @@ body {
   z-index: 2;
 }
 
-/* placed sign */
 .placed-sign{
   position:absolute;
   left:100px;
@@ -82,7 +81,6 @@ body {
   transform-style:preserve-3d;
 }
 
-/* rr sign object */
 .rr-sign{
   position:relative;
   width:70px;
@@ -95,52 +93,37 @@ body {
   position:absolute;
   left:0;
   top:0;
-
   width:70px;
   height:60px;
   border-radius:12px;
-
   background:
     linear-gradient(135deg, rgba(255,255,255,.18), transparent 35%),
     linear-gradient(135deg, #6b3f1e, #b9793a 55%, #5a3218);
-
   border:4px solid #3d2110;
-
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,.08),
     inset 0 -10px 18px rgba(0,0,0,.18);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   color:#251206;
   backface-visibility:hidden;
 }
 
-.sign-front{
-  transform:rotateY(0deg);
-}
-
-.sign-back{
-  transform:rotateY(180deg);
-}
+.sign-front{ transform:rotateY(0deg); }
+.sign-back{ transform:rotateY(180deg); }
 
 .sign-text{
   display:flex;
   align-items:center;
   justify-content:center;
-
   width:100%;
   height:100%;
-
   font-size:48px;
   font-weight:900;
   letter-spacing:1px;
   line-height:1;
-
   transform:translateY(-2px);
-
   text-shadow:
     1px 1px 0 rgba(255,255,255,.18),
     -1px -1px 0 rgba(0,0,0,.18);
@@ -154,9 +137,7 @@ body {
   font-size:38px;
 }
 
-.back-text{
-  gap:0;
-}
+.back-text{ gap:0; }
 
 .face-part{
   position:relative;
@@ -173,26 +154,19 @@ body {
   position:absolute;
   left:50%;
   top:56px;
-
   width:18px;
   height:64px;
-
   transform:translateX(-50%);
-
   background:
     linear-gradient(90deg, #2b1609, #9a6330 45%, #4a2712);
-
   border-left:3px solid #2b1609;
   border-right:3px solid #2b1609;
   border-top:none;
   border-bottom:none;
-
   border-radius:0;
-
   box-shadow:
     inset 3px 0 0 rgba(255,255,255,.1),
     inset -5px 0 0 rgba(0,0,0,.18);
-
   z-index:-1;
 }
 
@@ -261,11 +235,8 @@ body.backside .tick-label {
 
     <div class="grass-strip" id="grass"></div>
 
-    <!-- live sign -->
     <div class="placed-sign">
-
       <div class="rr-sign">
-
         <div class="sign-face sign-front">
           <div class="sign-text">rr</div>
         </div>
@@ -278,9 +249,7 @@ body.backside .tick-label {
         </div>
 
         <div class="sign-post"></div>
-
       </div>
-
     </div>
 
     <div class="ruler" id="ruler"></div>
@@ -359,11 +328,11 @@ function flip2P() {
 
   setTimeout(() => {
     grassWorld.classList.remove("flipping");
-  }, 1200);
+  }, 380);
 
   setTimeout(() => {
     grassWorld.classList.remove("flip-anim");
-  }, 1600);
+  }, 700);
 }
 
 for (let i = 0; i < bladeCount; i++) {
