@@ -43,7 +43,6 @@ body {
   will-change: transform, filter;
 }
 
-/* only animate when flipping, not while dragging */
 .grass-world.flip-anim {
   transition: transform 650ms ease, filter 650ms ease;
 }
@@ -70,6 +69,22 @@ body {
   bottom: 34px;
   height: 92px;
   z-index: 2;
+}
+
+.rr-sign-frame {
+  position: absolute;
+  left: 100px;
+  bottom: 24px;
+
+  width: 70px;
+  height: 120px;
+
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+  overflow: hidden;
+
+  z-index: 6;
 }
 
 .blade {
@@ -122,7 +137,6 @@ body {
   white-space: nowrap;
 }
 
-/* backside marker: readable but italic */
 body.backside .tick-label {
   transform: translateX(-50%) rotateY(180deg);
   font-style: italic;
@@ -136,6 +150,9 @@ body.backside .tick-label {
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
     <div class="grass-strip" id="grass"></div>
+
+    <iframe class="rr-sign-frame" src="signs/rr.html"></iframe>
+
     <div class="ruler" id="ruler"></div>
   </div>
 </div>
@@ -218,7 +235,6 @@ function flip2P() {
   }, 700);
 }
 
-/* make grass */
 for (let i = 0; i < bladeCount; i++) {
   const blade = document.createElement("div");
   blade.className = "blade";
@@ -236,7 +252,6 @@ for (let i = 0; i < bladeCount; i++) {
   grass.appendChild(blade);
 }
 
-/* make ruler */
 for (let x = 0; x <= worldWidth; x += 50) {
   const tick = document.createElement("div");
 
@@ -256,7 +271,6 @@ for (let x = 0; x <= worldWidth; x += 50) {
   }
 }
 
-/* iPhone touch drag + double tap */
 field.addEventListener("touchstart", (e) => {
   dragging = true;
   moved = false;
@@ -306,7 +320,6 @@ field.addEventListener("touchcancel", () => {
   dragging = false;
 });
 
-/* desktop mouse drag + double click */
 field.addEventListener("mousedown", (e) => {
   dragging = true;
   moved = false;
