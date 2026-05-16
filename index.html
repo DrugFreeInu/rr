@@ -71,20 +71,128 @@ body {
   z-index: 2;
 }
 
-.rr-sign-frame {
-  position: absolute;
-  left: 100px;
-  bottom: 24px;
+/* placed sign */
+.placed-sign{
+  position:absolute;
+  left:100px;
+  bottom:24px;
+  width:70px;
+  height:120px;
+  z-index:6;
+  transform-style:preserve-3d;
+}
 
-  width: 70px;
-  height: 120px;
+/* rr sign object */
+.rr-sign{
+  position:relative;
+  width:70px;
+  height:120px;
+  transform-style:preserve-3d;
+}
 
-  border: 0;
-  background: transparent;
-  pointer-events: none;
-  overflow: hidden;
+.sign-face{
+  position:absolute;
+  left:0;
+  top:0;
 
-  z-index: 6;
+  width:70px;
+  height:60px;
+  border-radius:12px;
+
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.18), transparent 35%),
+    linear-gradient(135deg, #6b3f1e, #b9793a 55%, #5a3218);
+
+  border:4px solid #3d2110;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.08),
+    inset 0 -10px 18px rgba(0,0,0,.18);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#251206;
+  backface-visibility:hidden;
+}
+
+.sign-front{
+  transform:rotateY(0deg);
+}
+
+.sign-back{
+  transform:rotateY(180deg);
+}
+
+.sign-text{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:100%;
+  height:100%;
+
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:1px;
+  line-height:1;
+
+  transform:translateY(-2px);
+
+  text-shadow:
+    1px 1px 0 rgba(255,255,255,.18),
+    -1px -1px 0 rgba(0,0,0,.18);
+}
+
+.sign-front .sign-text{
+  transform:translateY(-7px);
+}
+
+.sign-back .sign-text{
+  font-size:38px;
+}
+
+.back-text{
+  gap:0;
+}
+
+.face-part{
+  position:relative;
+  top:-3.5px;
+  left:3px;
+}
+
+.three-part{
+  position:relative;
+  top:-0.5px;
+}
+
+.sign-post{
+  position:absolute;
+  left:50%;
+  top:56px;
+
+  width:18px;
+  height:64px;
+
+  transform:translateX(-50%);
+
+  background:
+    linear-gradient(90deg, #2b1609, #9a6330 45%, #4a2712);
+
+  border-left:3px solid #2b1609;
+  border-right:3px solid #2b1609;
+  border-top:none;
+  border-bottom:none;
+
+  border-radius:0;
+
+  box-shadow:
+    inset 3px 0 0 rgba(255,255,255,.1),
+    inset -5px 0 0 rgba(0,0,0,.18);
+
+  z-index:-1;
 }
 
 .blade {
@@ -149,11 +257,33 @@ body.backside .tick-label {
 
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
+
     <div class="grass-strip" id="grass"></div>
 
-    <iframe class="rr-sign-frame" src="signs/rr.html"></iframe>
+    <!-- live sign -->
+    <div class="placed-sign">
+
+      <div class="rr-sign">
+
+        <div class="sign-face sign-front">
+          <div class="sign-text">rr</div>
+        </div>
+
+        <div class="sign-face sign-back">
+          <div class="sign-text back-text">
+            <span class="face-part">&lt;:</span>
+            <span class="three-part">3</span>
+          </div>
+        </div>
+
+        <div class="sign-post"></div>
+
+      </div>
+
+    </div>
 
     <div class="ruler" id="ruler"></div>
+
   </div>
 </div>
 
