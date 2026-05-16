@@ -44,7 +44,7 @@ body {
 }
 
 .grass-world.flip-anim {
-  transition: transform 650ms ease, filter 650ms ease;
+  transition: transform 1500ms ease, filter 1500ms ease;
 }
 
 .grass-world.flipping {
@@ -88,6 +88,7 @@ body {
   width:70px;
   height:120px;
   transform-style:preserve-3d;
+  font-family:"Chalkboard SE","Comic Sans MS",cursive;
 }
 
 .sign-face{
@@ -358,11 +359,11 @@ function flip2P() {
 
   setTimeout(() => {
     grassWorld.classList.remove("flipping");
-  }, 380);
+  }, 1200);
 
   setTimeout(() => {
     grassWorld.classList.remove("flip-anim");
-  }, 700);
+  }, 1600);
 }
 
 for (let i = 0; i < bladeCount; i++) {
