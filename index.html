@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
+<!-- RAT REALM CARNIVAL TENT INSERT -->
+
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Rat Realm Grass Ruler 2P</title>
-
 <style>
 * { box-sizing: border-box; }
 
@@ -170,6 +172,18 @@ body {
   z-index:-1;
 }
 
+.placed-tent{
+  position:absolute;
+  left:370px;
+  bottom:34px;
+  width:300px;
+  height:260px;
+  border:none;
+  background:transparent;
+  z-index:7;
+  pointer-events:none;
+}
+
 .blade {
   position: absolute;
   bottom: 0;
@@ -229,7 +243,6 @@ body.backside .tick-label {
 </head>
 
 <body>
-
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
 
@@ -237,6 +250,7 @@ body.backside .tick-label {
 
     <div class="placed-sign">
       <div class="rr-sign">
+
         <div class="sign-face sign-front">
           <div class="sign-text">rr</div>
         </div>
@@ -249,8 +263,14 @@ body.backside .tick-label {
         </div>
 
         <div class="sign-post"></div>
+
       </div>
     </div>
+
+    <iframe
+      class="placed-tent"
+      src="carnifolder/tent.html">
+    </iframe>
 
     <div class="ruler" id="ruler"></div>
 
@@ -447,6 +467,5 @@ window.addEventListener("resize", render);
 
 render();
 </script>
-
 </body>
 </html>
