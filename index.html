@@ -1,8 +1,5 @@
 <!doctype html>
 <html>
-
-<!-- RAT REALM CARNIVAL TENT INSERT -->
-
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -24,11 +21,12 @@ body {
   align-items: center;
 }
 
+/* WORLD */
 .field {
   position: relative;
   width: 100vw;
-  height: 160px;
-  overflow: hidden;
+  height: 340px;
+  overflow: visible;
   touch-action: none;
   user-select: none;
   perspective: 900px;
@@ -39,7 +37,8 @@ body {
   left: 0;
   top: 0;
   width: 4000px;
-  height: 160px;
+  height: 900px;
+  overflow: visible;
   transform: translateX(0px) rotateY(0deg);
   transform-style: preserve-3d;
   will-change: transform, filter;
@@ -64,6 +63,7 @@ body {
   z-index: 1;
 }
 
+/* GRASS */
 .grass-strip {
   position: absolute;
   left: 0;
@@ -73,6 +73,16 @@ body {
   z-index: 2;
 }
 
+.blade {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  border-radius: 50% 50% 0 0;
+  transform-origin: bottom center;
+  clip-path: polygon(50% 0%,70% 20%,100% 100%,0% 100%,30% 20%);
+}
+
+/* SIGN */
 .placed-sign{
   position:absolute;
   left:100px;
@@ -81,6 +91,98 @@ body {
   height:120px;
   z-index:6;
   transform-style:preserve-3d;
+}
+
+.rr-sign{
+  position:relative;
+  width:70px;
+  height:120px;
+  transform-style:preserve-3d;
+  font-family:"Chalkboard SE","Comic Sans MS",cursive;
+}
+
+.sign-face{
+  position:absolute;
+  left:0;
+  top:0;
+  width:70px;
+  height:60px;
+  border-radius:12px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.18), transparent 35%),
+    linear-gradient(135deg, #6b3f1e, #b9793a 55%, #5a3218);
+  border:4px solid #3d2110;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.08),
+    inset 0 -10px 18px rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#251206;
+  backface-visibility:hidden;
+}
+
+.sign-front{ transform:rotateY(0deg); }
+.sign-back{ transform:rotateY(180deg); }
+
+.sign-text{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:1px;
+  line-height:1;
+  transform:translateY(-2px);
+  text-shadow:
+    1px 1px 0 rgba(255,255,255,.18),
+    -1px -1px 0 rgba(0,0,0,.18);
+}
+
+.sign-front .sign-text{ transform:translateY(-7px); }
+.sign-back .sign-text{ font-size:38px; }
+.back-text{ gap:0; }
+
+.face-part{
+  position:relative;
+  top:-3.5px;
+  left:3px;
+}
+
+.three-part{
+  position:relative;
+  top:-0.5px;
+}
+
+.sign-post{
+  position:absolute;
+  left:50%;
+  top:56px;
+  width:18px;
+  height:64px;
+  transform:translateX(-50%);
+  background:
+    linear-gradient(90deg, #2b1609, #9a6330 45%, #4a2712);
+  border-left:3px solid #2b1609;
+  border-right:3px solid #2b1609;
+  box-shadow:
+    inset 3px 0 0 rgba(255,255,255,.1),
+    inset -5px 0 0 rgba(0,0,0,.18);
+  z-index:-1;
+}
+
+/* TENT */
+.placed-tent{
+  position:absolute;
+  left:370px;
+  bottom:34px;
+  width:300px;
+  height:260px;
+  z-index:1;
+  pointer-events:none;
+  overflow:visible;
 }
 
 .tent{
@@ -167,114 +269,7 @@ body {
   z-index:-1;
 }
 
-.rr-sign{
-  position:relative;
-  width:70px;
-  height:120px;
-  transform-style:preserve-3d;
-  font-family:"Chalkboard SE","Comic Sans MS",cursive;
-}
-
-.sign-face{
-  position:absolute;
-  left:0;
-  top:0;
-  width:70px;
-  height:60px;
-  border-radius:12px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.18), transparent 35%),
-    linear-gradient(135deg, #6b3f1e, #b9793a 55%, #5a3218);
-  border:4px solid #3d2110;
-  box-shadow:
-    inset 0 0 0 2px rgba(255,255,255,.08),
-    inset 0 -10px 18px rgba(0,0,0,.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#251206;
-  backface-visibility:hidden;
-}
-
-.sign-front{ transform:rotateY(0deg); }
-.sign-back{ transform:rotateY(180deg); }
-
-.sign-text{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  height:100%;
-  font-size:48px;
-  font-weight:900;
-  letter-spacing:1px;
-  line-height:1;
-  transform:translateY(-2px);
-  text-shadow:
-    1px 1px 0 rgba(255,255,255,.18),
-    -1px -1px 0 rgba(0,0,0,.18);
-}
-
-.sign-front .sign-text{
-  transform:translateY(-7px);
-}
-
-.sign-back .sign-text{
-  font-size:38px;
-}
-
-.back-text{ gap:0; }
-
-.face-part{
-  position:relative;
-  top:-3.5px;
-  left:3px;
-}
-
-.three-part{
-  position:relative;
-  top:-0.5px;
-}
-
-.sign-post{
-  position:absolute;
-  left:50%;
-  top:56px;
-  width:18px;
-  height:64px;
-  transform:translateX(-50%);
-  background:
-    linear-gradient(90deg, #2b1609, #9a6330 45%, #4a2712);
-  border-left:3px solid #2b1609;
-  border-right:3px solid #2b1609;
-  border-top:none;
-  border-bottom:none;
-  border-radius:0;
-  box-shadow:
-    inset 3px 0 0 rgba(255,255,255,.1),
-    inset -5px 0 0 rgba(0,0,0,.18);
-  z-index:-1;
-}
-
-.placed-tent{
-  position:absolute;
-  left:370px;
-  bottom:34px;
-  width:300px;
-  height:260px;
-  z-index:1;
-  pointer-events:none;
-}
-
-.blade {
-  position: absolute;
-  bottom: 0;
-  width: 3px;
-  border-radius: 50% 50% 0 0;
-  transform-origin: bottom center;
-  clip-path: polygon(50% 0%,70% 20%,100% 100%,0% 100%,30% 20%);
-}
-
+/* RULER */
 .ruler {
   position: absolute;
   left: 0;
@@ -323,8 +318,9 @@ body.backside .tick-label {
 }
 </style>
 </head>
-
 <body>
+<!-- RAT REALM CARNIVAL TENT INSERT -->
+
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
 
@@ -350,14 +346,14 @@ body.backside .tick-label {
     </div>
 
     <div class="placed-tent">
-  <div class="tent">
-    <div class="glow"></div>
-    <div class="flag"></div>
-    <div class="roof"></div>
-    <div class="body"></div>
-    <div class="door"></div>
-  </div>
-</div>
+      <div class="tent">
+        <div class="glow"></div>
+        <div class="flag"></div>
+        <div class="roof"></div>
+        <div class="body"></div>
+        <div class="door"></div>
+      </div>
+    </div>
 
     <div class="ruler" id="ruler"></div>
 
@@ -410,7 +406,7 @@ function render() {
   const pivotX = currentCenterWorldX();
   const rot = backside ? 180 : 0;
 
-  grassWorld.style.transformOrigin = `${pivotX}px 80px`;
+  grassWorld.style.transformOrigin = `${pivotX}px 170px`;
   grassWorld.style.transform = `translateX(${worldX}px) rotateY(${rot}deg)`;
 }
 
