@@ -174,6 +174,240 @@ body {
   z-index:-1;
 }
 
+/* TRAFFIC LIGHT OBJECT */
+.placed-traffic{
+  position:absolute;
+  left:233px;
+  bottom:34px;
+  width:120px;
+  height:240px;
+  z-index:7;
+  pointer-events:auto;
+  transform-style:preserve-3d;
+}
+
+.traffic-stack{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.traffic-module{
+  position:relative;
+  width:96px;
+  height:76px;
+  border:3px solid #050505;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    linear-gradient(
+      to right,
+      #030303,
+      #171717 38%,
+      #050505 70%,
+      #000
+    );
+  box-shadow:
+    0 10px 18px rgba(0,0,0,.45),
+    inset 0 2px rgba(255,255,255,.04),
+    inset 0 -4px rgba(0,0,0,.65);
+}
+
+.traffic-module:nth-child(1){
+  transform:translateX(-6px) rotate(-2.4deg);
+  border-radius:13px 13px 0 0;
+}
+
+.traffic-module:nth-child(2){
+  transform:translateX(5px) rotate(1.8deg);
+}
+
+.traffic-module:nth-child(3){
+  transform:translateX(-2px) rotate(-1deg);
+  border-radius:0 0 13px 13px;
+}
+
+.bolt{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #bfc5ce,
+      #7e848d 45%,
+      #2b2f35 100%
+    );
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.28),
+    inset 0 -1px rgba(0,0,0,.5),
+    0 1px 3px rgba(0,0,0,.5);
+}
+
+.b1{left:8px;top:8px;}
+.b2{right:8px;top:8px;}
+.b3{left:8px;bottom:8px;}
+.b4{right:8px;bottom:8px;}
+
+.traffic-lens{
+  position:relative;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  overflow:hidden;
+  cursor:pointer;
+  transition:opacity .25s, filter .25s;
+}
+
+.traffic-lens:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.05) 0 1px,
+      rgba(0,0,0,.06) 1px 2px,
+      transparent 2px 4px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255,255,255,.055) 0 2px,
+      transparent 2px 4px
+    );
+  opacity:.55;
+  mix-blend-mode:screen;
+}
+
+.traffic-lens:after{
+  content:"";
+  position:absolute;
+  left:8px;
+  top:7px;
+  width:64%;
+  height:34%;
+  border-radius:50%;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.28),
+      rgba(255,255,255,.02)
+    );
+  filter:blur(1px);
+  transform:rotate(-8deg);
+}
+
+.red{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #ffd2ca,
+      #ff765d 14%,
+      #ff351a 32%,
+      #b11800 58%,
+      #270200 100%
+    );
+  opacity:1;
+}
+
+.yellow{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #fff1c8,
+      #ffd45c 14%,
+      #ffb31e 32%,
+      #b86d00 58%,
+      #211100 100%
+    );
+  opacity:.25;
+}
+
+.green{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #ceffe4,
+      #6dffac 14%,
+      #18d866 32%,
+      #007d35 58%,
+      #001108 100%
+    );
+  opacity:.25;
+}
+
+.glitch{
+  animation:electricLens .95s steps(1);
+}
+
+.glitch:before{
+  opacity:.78;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.48) 0 1px,
+      rgba(200,230,255,.18) 1px 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.34) 0 1px,
+      transparent 1px 5px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255,255,255,.28) 0 2px,
+      transparent 2px 6px
+    );
+}
+
+.glitch:after{
+  background:
+    radial-gradient(
+      circle at 45% 45%,
+      rgba(255,255,255,.58),
+      rgba(210,235,255,.22) 30%,
+      transparent 64%
+    );
+}
+
+@keyframes electricLens{
+  0%,100%{
+    filter:brightness(1);
+    box-shadow:none;
+  }
+
+  18%{
+    filter:brightness(1.45) contrast(1.08);
+    box-shadow:
+      0 0 10px rgba(255,255,255,.32),
+      0 0 22px rgba(180,220,255,.18);
+  }
+
+  34%{
+    filter:brightness(.82);
+    box-shadow:none;
+  }
+
+  56%{
+    filter:brightness(1.7) contrast(1.12);
+    box-shadow:
+      0 0 12px rgba(255,255,255,.38),
+      0 0 28px rgba(190,225,255,.20);
+  }
+
+  76%{
+    filter:brightness(1.05);
+    box-shadow:none;
+  }
+}
+
+.broken{
+  opacity:.06 !important;
+  filter:grayscale(1) contrast(.7);
+  box-shadow:none !important;
+}
+
 /* TENT */
 .placed-tent{
   position:absolute;
@@ -190,8 +424,6 @@ body {
   position:relative;
   width:300px;
   height:260px;
-
-  /* lifts roof + flag while keeping door grounded */
   transform:translateY(-65px);
 }
 
@@ -324,7 +556,6 @@ body.backside .tick-label {
 </head>
 
 <body>
-<!-- RAT REALM CARNIVAL TENT INSERT -->
 
 <div class="field" id="field">
   <div class="grass-world" id="grassWorld">
@@ -346,6 +577,36 @@ body.backside .tick-label {
         </div>
 
         <div class="sign-post"></div>
+
+      </div>
+    </div>
+
+    <div class="placed-traffic" id="trafficLight">
+      <div class="traffic-stack">
+
+        <div class="traffic-module">
+          <div class="bolt b1"></div>
+          <div class="bolt b2"></div>
+          <div class="bolt b3"></div>
+          <div class="bolt b4"></div>
+          <div class="traffic-lens red"></div>
+        </div>
+
+        <div class="traffic-module">
+          <div class="bolt b1"></div>
+          <div class="bolt b2"></div>
+          <div class="bolt b3"></div>
+          <div class="bolt b4"></div>
+          <div class="traffic-lens yellow"></div>
+        </div>
+
+        <div class="traffic-module">
+          <div class="bolt b1"></div>
+          <div class="bolt b2"></div>
+          <div class="bolt b3"></div>
+          <div class="bolt b4"></div>
+          <div class="traffic-lens green"></div>
+        </div>
 
       </div>
     </div>
@@ -443,6 +704,7 @@ function flip2P() {
   }, 700);
 }
 
+/* GRASS */
 for (let i = 0; i < bladeCount; i++) {
   const blade = document.createElement("div");
   blade.className = "blade";
@@ -460,6 +722,7 @@ for (let i = 0; i < bladeCount; i++) {
   grass.appendChild(blade);
 }
 
+/* RULER */
 for (let x = 0; x <= worldWidth; x += 50) {
   const tick = document.createElement("div");
 
@@ -479,7 +742,67 @@ for (let x = 0; x <= worldWidth; x += 50) {
   }
 }
 
+/* TRAFFIC LIGHT TAP LOGIC */
+document.querySelectorAll(".traffic-lens").forEach(light=>{
+  let state = 0;
+
+  light.addEventListener("touchstart", e=>{
+    e.stopPropagation();
+  }, {passive:false});
+
+  light.addEventListener("touchmove", e=>{
+    e.stopPropagation();
+  }, {passive:false});
+
+  light.addEventListener("mousedown", e=>{
+    e.stopPropagation();
+  });
+
+  light.addEventListener("click", e=>{
+    e.stopPropagation();
+
+    state++;
+
+    if(state === 1){
+      light.classList.remove("glitch");
+      void light.offsetWidth;
+      light.classList.add("glitch");
+
+      setTimeout(()=>{
+        light.classList.remove("glitch");
+      },950);
+    }
+
+    else if(state === 2){
+      light.classList.remove("glitch");
+      light.style.opacity = ".08";
+      light.style.boxShadow = "none";
+    }
+
+    else if(state === 3){
+      light.classList.add("broken");
+      light.classList.remove("glitch");
+    }
+
+    else{
+      state = 0;
+      light.classList.remove("broken");
+      light.classList.remove("glitch");
+      light.style.boxShadow = "";
+
+      if(light.classList.contains("red")){
+        light.style.opacity = "1";
+      }else{
+        light.style.opacity = ".25";
+      }
+    }
+  });
+});
+
+/* WORLD TOUCH */
 field.addEventListener("touchstart", (e) => {
+  if(e.target.closest(".placed-traffic")) return;
+
   dragging = true;
   moved = false;
   startX = e.touches[0].clientX;
@@ -500,6 +823,11 @@ field.addEventListener("touchmove", (e) => {
 }, { passive: false });
 
 field.addEventListener("touchend", (e) => {
+  if(e.target.closest(".placed-traffic")){
+    dragging = false;
+    return;
+  }
+
   dragging = false;
 
   if (moved) return;
@@ -528,14 +856,20 @@ field.addEventListener("touchcancel", () => {
   dragging = false;
 });
 
+/* WORLD MOUSE */
 field.addEventListener("mousedown", (e) => {
+  if(e.target.closest(".placed-traffic")) return;
+
   dragging = true;
   moved = false;
   startX = e.clientX;
   startWorldX = worldX;
 });
 
-field.addEventListener("dblclick", flip2P);
+field.addEventListener("dblclick", (e)=>{
+  if(e.target.closest(".placed-traffic")) return;
+  flip2P();
+});
 
 window.addEventListener("mousemove", (e) => {
   if (!dragging) return;
