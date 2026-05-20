@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Traffic Stack</title>
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#050505;
+  font-family:sans-serif;
+}
+
+.scene{
+  width:100%;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* stack */
+.light-box{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+/* crooked modules */
+.light-wrap{
+  position:relative;
+  width:96px;
+  height:76px;
+  border:3px solid #050505;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    linear-gradient(
+      to right,
+      #030303,
+      #171717 38%,
+      #050505 70%,
+      #000
+    );
+
+  box-shadow:
+    0 10px 18px rgba(0,0,0,.45),
+    inset 0 2px rgba(255,255,255,.04),
+    inset 0 -4px rgba(0,0,0,.65);
+}
+
+.light-wrap:nth-child(1){
+  transform:translateX(-6px) rotate(-2.4deg);
+  border-radius:13px 13px 0 0;
+}
+
+.light-wrap:nth-child(2){
+  transform:translateX(5px) rotate(1.8deg);
+}
+
+.light-wrap:nth-child(3){
+  transform:translateX(-2px) rotate(-1deg);
+  border-radius:0 0 13px 13px;
+}
+
+/* bolts */
+.bolt{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #bfc5ce,
+      #7e848d 45%,
+      #2b2f35 100%
+    );
+
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.28),
+    inset 0 -1px rgba(0,0,0,.5),
+    0 1px 3px rgba(0,0,0,.5);
+}
+
+.b1{left:8px;top:8px;}
+.b2{right:8px;top:8px;}
+.b3{left:8px;bottom:8px;}
+.b4{right:8px;bottom:8px;}
+
+/* lights */
+.light{
+  position:relative;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  overflow:hidden;
+  cursor:pointer;
+  transition:opacity .25s, filter .25s;
+}
+
+/* lens texture */
+.light:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.05) 0 1px,
+      rgba(0,0,0,.06) 1px 2px,
+      transparent 2px 4px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255,255,255,.055) 0 2px,
+      transparent 2px 4px
+    );
+
+  opacity:.55;
+  mix-blend-mode:screen;
+}
+
+/* shine */
+.light:after{
+  content:"";
+  position:absolute;
+  left:8px;
+  top:7px;
+  width:64%;
+  height:34%;
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.28),
+      rgba(255,255,255,.02)
+    );
+
+  filter:blur(1px);
+  transform:rotate(-8deg);
+}
+
+/* COLORS */
+.red{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #ffd2ca,
+      #ff765d 14%,
+      #ff351a 32%,
+      #b11800 58%,
+      #270200 100%
+    );
+  opacity:1;
+}
+
+.yellow{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #fff1c8,
+      #ffd45c 14%,
+      #ffb31e 32%,
+      #b86d00 58%,
+      #211100 100%
+    );
+  opacity:.25;
+}
+
+.green{
+  background:
+    radial-gradient(circle at 35% 30%,
+      #ceffe4,
+      #6dffac 14%,
+      #18d866 32%,
+      #007d35 58%,
+      #001108 100%
+    );
+  opacity:.25;
+}
+
+/* soft white electric tap burst — no shaking */
+.glitch{
+  animation:electricLens .95s steps(1);
+}
+
+.glitch:before{
+  opacity:.78;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.48) 0 1px,
+      rgba(200,230,255,.18) 1px 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.34) 0 1px,
+      transparent 1px 5px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255,255,255,.28) 0 2px,
+      transparent 2px 6px
+    );
+}
+
+.glitch:after{
+  background:
+    radial-gradient(
+      circle at 45% 45%,
+      rgba(255,255,255,.58),
+      rgba(210,235,255,.22) 30%,
+      transparent 64%
+    );
+}
+
+@keyframes electricLens{
+  0%,100%{
+    filter:brightness(1);
+    box-shadow:none;
+  }
+
+  18%{
+    filter:brightness(1.45) contrast(1.08);
+    box-shadow:
+      0 0 10px rgba(255,255,255,.32),
+      0 0 22px rgba(180,220,255,.18);
+  }
+
+  34%{
+    filter:brightness(.82);
+    box-shadow:none;
+  }
+
+  56%{
+    filter:brightness(1.7) contrast(1.12);
+    box-shadow:
+      0 0 12px rgba(255,255,255,.38),
+      0 0 28px rgba(190,225,255,.20);
+  }
+
+  76%{
+    filter:brightness(1.05);
+    box-shadow:none;
+  }
+}
+
+/* broken */
+.broken{
+  opacity:.06 !important;
+  filter:grayscale(1) contrast(.7);
+  box-shadow:none !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+  <div class="light-box">
+
+    <div class="light-wrap">
+      <div class="bolt b1"></div>
+      <div class="bolt b2"></div>
+      <div class="bolt b3"></div>
+      <div class="bolt b4"></div>
+      <div class="light red"></div>
+    </div>
+
+    <div class="light-wrap">
+      <div class="bolt b1"></div>
+      <div class="bolt b2"></div>
+      <div class="bolt b3"></div>
+      <div class="bolt b4"></div>
+      <div class="light yellow"></div>
+    </div>
+
+    <div class="light-wrap">
+      <div class="bolt b1"></div>
+      <div class="bolt b2"></div>
+      <div class="bolt b3"></div>
+      <div class="bolt b4"></div>
+      <div class="light green"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll(".light").forEach(light=>{
+
+  let state = 0;
+
+  light.addEventListener("click",()=>{
+
+    state++;
+
+    /* 1st tap = soft white electric glitch burst */
+    if(state === 1){
+      light.classList.remove("glitch");
+      void light.offsetWidth;
+      light.classList.add("glitch");
+
+      setTimeout(()=>{
+        light.classList.remove("glitch");
+      },950);
+    }
+
+    /* 2nd tap = off */
+    else if(state === 2){
+      light.classList.remove("glitch");
+      light.style.opacity = ".08";
+      light.style.boxShadow = "none";
+    }
+
+    /* 3rd tap = broken */
+    else if(state === 3){
+      light.classList.add("broken");
+      light.classList.remove("glitch");
+    }
+
+    /* 4th tap = reset */
+    else{
+      state = 0;
+      light.classList.remove("broken");
+      light.classList.remove("glitch");
+      light.style.boxShadow = "";
+
+      if(light.classList.contains("red")){
+        light.style.opacity = "1";
+      }else{
+        light.style.opacity = ".25";
+      }
+    }
+
+  });
+
+});
+</script>
+
+</body>
+</html>
