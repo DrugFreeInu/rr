@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rat Realm Grass Ruler 2P</title>
+<title>&lt;:3 Rat Realm</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -505,6 +505,54 @@ body {
   z-index:-1;
 }
 
+/* TEX RAT ENTITY */
+.tex-rat-wander{
+  position:absolute;
+  left:760px;
+  bottom:42px;
+  z-index:8;
+
+  color:#1f1b17;
+  font-family:monospace;
+  pointer-events:none;
+
+  transition:
+    left 2.8s ease-in-out,
+    transform .35s ease;
+
+  transform:scaleX(1);
+  transform-origin:center center;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.7),
+    0 0 8px rgba(0,0,0,.08);
+}
+
+.tex-rat-glyph{
+  margin:0;
+  font-size:54px;
+  line-height:1;
+  letter-spacing:-6px;
+}
+
+/* move : eyes up */
+.tex-rat-glyph .colon{
+  position:relative;
+  top:-6px;
+  display:inline-block;
+  animation: texBlink 5.5s infinite;
+}
+
+/* slow blink */
+@keyframes texBlink{
+  0%, 44%, 52%, 100%{
+    opacity:1;
+  }
+  46%, 50%{
+    opacity:0;
+  }
+}
+
 /* RULER */
 .ruler {
   position: absolute;
@@ -621,6 +669,10 @@ body.backside .tick-label {
       </div>
     </div>
 
+    <div class="tex-rat-wander" id="texRat">
+      <pre class="tex-rat-glyph">&lt;<span class="colon">:</span>3</pre>
+    </div>
+
     <div class="ruler" id="ruler"></div>
 
   </div>
@@ -631,6 +683,7 @@ const field = document.getElementById("field");
 const grassWorld = document.getElementById("grassWorld");
 const grass = document.getElementById("grass");
 const ruler = document.getElementById("ruler");
+const texRat = document.getElementById("texRat");
 
 const worldWidth = 4000;
 const bladeCount = 900;
@@ -647,6 +700,9 @@ let rafPending = false;
 let lastTapTime = 0;
 let lastTapX = 0;
 let lastTapY = 0;
+
+let texRatX = 760;
+let texRatFacing = 1;
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
@@ -741,6 +797,32 @@ for (let x = 0; x <= worldWidth; x += 50) {
     ruler.appendChild(label);
   }
 }
+
+/* TEX RAT WANDER LOGIC */
+function wanderTexRat(){
+  if (!texRat) return;
+
+  const ratWidth = texRat.offsetWidth || 80;
+
+  const minX = 40;
+  const maxX = worldWidth - ratWidth - 40;
+
+  const moveAmount = 40 + Math.random() * 210;
+  const direction = Math.random() > 0.5 ? 1 : -1;
+
+  texRatX += moveAmount * direction;
+  texRatX = clamp(texRatX, minX, maxX);
+
+  texRatFacing = direction;
+
+  texRat.style.left = `${texRatX}px`;
+  texRat.style.transform = `scaleX(${texRatFacing})`;
+
+  const nextMove = 1400 + Math.random() * 4200;
+  setTimeout(wanderTexRat, nextMove);
+}
+
+wanderTexRat();
 
 /* TRAFFIC LIGHT TAP LOGIC */
 document.querySelectorAll(".traffic-lens").forEach(light=>{
