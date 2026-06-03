@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html,body{
+  margin:0;
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  font-family:monospace;
+}
+
+.tex-rat{
+  position:relative;
+  width:260px;
+  height:140px;
+  display:grid;
+  place-items:center;
+  color:#f4ead8;
+}
+
+/* whole rat */
+.rat-glyph{
+  position:relative;
+  font-size:86px;
+  letter-spacing:-8px;
+  line-height:1;
+  margin:0;
+}
+
+/* move the : up a bit */
+.rat-glyph .colon{
+  position:relative;
+  top:-10px;
+  display:inline-block;
+}
+
+/* slow blink on the : eyes */
+.rat-glyph .colon::after{
+  content:":";
+  position:absolute;
+  inset:0;
+  color:inherit;
+  animation: blink 4.8s infinite;
+}
+
+@keyframes blink{
+  0%, 44%, 52%, 100%{
+    opacity:1;
+  }
+  46%, 50%{
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="tex-rat">
+    <pre class="rat-glyph">&lt;<span class="colon">:</span>3</pre>
+  </div>
+</body>
+</html>
